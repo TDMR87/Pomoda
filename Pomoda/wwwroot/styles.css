@@ -1,0 +1,28 @@
+﻿.nav {
+    margin-top: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: #11191F;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.movie-card {
+    animation: fadeIn 0.5s;
+}
+
+.search-field {
+    position: sticky;
+    top: 100px;
+    background-color: transparent;
+    padding: 10px;
+}

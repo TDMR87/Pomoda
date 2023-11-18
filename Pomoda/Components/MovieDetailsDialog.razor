@@ -1,0 +1,28 @@
+﻿@using Pomoda.Endpoints;
+
+<dialog id="movie-details-modal" open>
+    <article style="text-align:center">
+    <img src="@(Model.ImageBaseAddress + Model.PosterPath)" />
+    <br>                    
+    <br>
+    <hr>
+    <h3>@Model.Title (@Model.ReleaseDate?.Split('-')[0]})</h3>
+    <p>@Model.Overview</p>
+    <br>
+    <br>
+	<button 
+        type="button"
+        hx-get="@Endpoints.CloseMovieDetailsDialog" 
+        hx-target="#movie-details-modal" 
+        hx-swap="outerHTML"
+        hx-indicator="#isLoading_@Model.Id">
+        Close
+    </button>
+    <progress class="htmx-indicator" id="isLoading_@Model.Id"></progress>
+    </article>
+</dialog>
+
+@code
+{
+    [Parameter] public MovieDetails Model { get; set; } = new();
+}

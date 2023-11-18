@@ -1,0 +1,24 @@
+﻿@using Pomoda.Endpoints;
+
+<div class=" col-xs-12 col-sm-6 col-lg-4 movie-card">
+    <article style="padding-bottom:20px">
+        <header style="margin-bottom:20px">
+            <img src="@(Model.ImageBaseAddress + Model.PosterPath)" />
+        </header>
+        <h3 class="card-title">@Model.Title (@Model.ReleaseDate?.Split('-')[0]})</h3>
+        <p>@Model.Overview.Peek(characters: 100 - Model.Title?.Length ?? 0)</p>
+        <button hx-get="@Endpoints.OpenMovieDetailsDialog"
+                hx-vals='{"movieId": "@Model.Id"}'
+                hx-target="body"
+                hx-swap="beforeend"
+                hx-indicator=" #isLoading-@Model.Id">
+            More
+        </button>
+        <progress class="htmx-indicator" id=" isLoading-@Model.Id"></progress>
+    </article>
+</div>
+
+@code
+{
+    [Parameter] public MovieDetails Model { get; set; } = new();
+}

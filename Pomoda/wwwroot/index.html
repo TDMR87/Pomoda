@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html class="modal-is-opening">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css" type="text/css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <main class="container">
+
+            <!-- Navbar -->
+            <nav class="nav">
+                <ul style="padding:0px;margin:0px">
+                    <li style="padding:0px;margin:0px">
+                        <strong style="font-size:30px;color:darkorange">Pomoda</strong>
+                        <p style="font-size:13px;color:dimgray"><i>The pocket movie database</i></p>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Search input field -->
+            <div class="search-field">
+                <input 
+                    autofocus
+                    type="search"
+                    name="keyword"
+                    placeholder="Type to search for movies..."
+                    hx-post="search-movies-by-keyword"
+                    hx-trigger="keyup changed delay:500ms, search"
+                    hx-target="#search-results"
+                    hx-swap="innerHTML"
+                    hx-indicator="#loadingIndicator">
+            </div>
+
+            <!-- Loading indicator when HTTP requests are in-flight -->
+            <progress class="htmx-indicator" id="loadingIndicator"></progress>
+
+            <!-- Search results are displayed here -->
+            <div id="search-results"
+                 class="row"
+                 style="text-align:center">
+            </div>
+        </main>
+    </body>
+</html>
