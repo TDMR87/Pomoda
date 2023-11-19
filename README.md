@@ -1,6 +1,6 @@
 # Pomoda (Pocket Movie Database)
 
-A demo app created with .NET Minimal APIs, Razor Components and HTMX _(light-heartedly coined as the **MARCH**-stack).
+A demo app created with .NET Minimal APIs, Razor Components and HTMX _(light-heartedly coined as the **MARCH**-stack)_.
 
 Try the live demo at [pomoda.azurewebsites.net](https://pomoda.azurewebsites.net/)	
 
