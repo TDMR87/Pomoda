@@ -1,9 +1,0 @@
-﻿@foreach (MovieDetails movie in Model)
-{
-    <MovieDetailsCard Model="@movie" />
-}
-
-@code 
-{
-    [Parameter] public List<MovieDetails> Model { get; set; } = new();
-}

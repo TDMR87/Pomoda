@@ -1,28 +1,24 @@
-﻿using Pomoda.Models;
-
-namespace Pomoda.Services;
+﻿namespace Pomoda.Backend.Services;
 
 /// <summary>
 /// This service retrieves movie data from an external movie database API.
 /// </summary>
 public class MovieService : IMovieService
 {
-    private readonly ILogger<MovieService> _logger;
     private readonly IHttpClientFactory _httpClientFactory;
 
-    public MovieService(ILogger<MovieService> logger, IHttpClientFactory httpClientFactory, IConfiguration config)
+    public MovieService(IHttpClientFactory httpClientFactory, IConfiguration config)
     {
-        _logger = logger;
         _httpClientFactory = httpClientFactory;
     }
 
     /// <summary>
-    /// Retrieves movies by search keyword.
+    /// Retrieves details of movies that match the specified search keyword.
     /// </summary>
     /// <param name="keyword"></param>
     /// <param name="includeAdult"></param>
     /// <returns></returns>
-    public async Task<IEnumerable<MovieDetails>> GetByKeywordAsync(string keyword)
+    public async Task<MovieSearchResponse<MovieDetails>> SearchByKeywordAsync(string keyword, int page)
     {
         var httpClient = _httpClientFactory.CreateClient("MovieDatabase");
 
@@ -30,25 +26,39 @@ public class MovieService : IMovieService
         (
             $"search/multi?query={keyword}" +
             $"&include_adult=false" +
-            $"&language=en-US&page=1"
+            $"&page={page}"
         );
 
         if (response.IsSuccessStatusCode)
         {
-            var movies = await response.Content.ReadFromJsonAsync<MovieSearchResponse<MovieDetails>>();
-            return movies?.Results.Where(m => m.Title is not null && m.PosterPath is not null) ?? Enumerable.Empty<MovieDetails>();
+            var movies = await response.Content.ReadFromJsonAsync<MovieSearchResponse<MovieDetails>>()
+                ?? new MovieSearchResponse<MovieDetails>();
+
+            movies.Results = movies.Results.Where(
+                movie => 
+                movie.Title is not null &&
+                movie.PosterPath is not null)
+                .OrderByDescending(movie => movie.ReleaseDate)
+                .ToList();
+
+            return movies;
         }
         else
         {
-            return Enumerable.Empty<MovieDetails>();
+            return new MovieSearchResponse<MovieDetails>();
         }
     }
 
+    /// <summary>
+    /// Returns details of a single movie with the specified id.
+    /// </summary>
+    /// <param name="movieId"></param>
+    /// <returns></returns>
     public async Task<MovieDetails?> GetById(string movieId)
     {
         var httpClient = _httpClientFactory.CreateClient("MovieDatabase");
 
-        var response = await httpClient.GetAsync($"movie/{movieId}?language=en-US");
+        var response = await httpClient.GetAsync($"movie/{movieId}");
 
         if (response.IsSuccessStatusCode)
         {

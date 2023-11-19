@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Http.HttpResults;
 
-namespace Pomoda.Utils;
+namespace Pomoda.Shared.Utils;
 
 public static class StringExtensions
 {

@@ -1,13 +1,13 @@
-﻿namespace Pomoda.Models;
+﻿namespace Pomoda.Shared.Models;
 
 /*
- * The classes in this file are just modeling data returned 
- * from the 3rd party movie database and make serialization easier.
+ * The classes in this file are modeling data returned 
+ * from the 3rd party movie database.
  */
 
 public class MovieDetails
 {
-    public string ImageBaseAddress { get; set; } = "https://image.tmdb.org/t/p/w185/";
+    public string ImageBaseAddress { get; init; } = "https://image.tmdb.org/t/p/w185/";
 
     [JsonPropertyName("adult")]
     public bool Adult { get; set; }

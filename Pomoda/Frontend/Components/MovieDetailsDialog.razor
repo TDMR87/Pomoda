@@ -1,12 +1,12 @@
-﻿@using Pomoda.Endpoints;
+﻿@using Pomoda.Backend.Endpoints
 
-<dialog id="movie-details-modal" open>
+<dialog id="movie-details-modal" open="true">
     <article style="text-align:center">
     <img src="@(Model.ImageBaseAddress + Model.PosterPath)" />
     <br>                    
     <br>
     <hr>
-    <h3>@Model.Title (@Model.ReleaseDate?.Split('-')[0]})</h3>
+    <h3>@Model.Title (@Model.ReleaseDate?.Split('-')[0])</h3>
     <p>@Model.Overview</p>
     <br>
     <br>

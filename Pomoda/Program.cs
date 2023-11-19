@@ -1,27 +1,34 @@
 global using Microsoft.AspNetCore.Mvc;
 global using System.Text.Json.Serialization;
 global using System.Net.Http.Headers;
-global using Pomoda.Models;
-global using Pomoda.Utils;
-global using Pomoda.Services;
-global using Pomoda.Endpoints;
-global using Pomoda.Middleware;
-global using Pomoda.Components;
+global using Pomoda.Shared.Models;
+global using Pomoda.Shared.Utils;
+global using Pomoda.Backend.Services;
+global using Pomoda.Backend.Endpoints;
+global using Pomoda.Backend.Middleware;
+global using Pomoda.Frontend.Components;
+using Microsoft.Extensions.FileProviders;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+{
+    Args = args,
+    WebRootPath = "Frontend"
+});
 
+// Configure Razor Components to be used
 builder.Services.AddRazorComponents();
 
 // Add a custom CORS policy
 builder.Services.AddCors
 (
-    cors => cors.AddPolicy(name: "default-policy", policy => policy
-                .AllowAnyHeader()
-                .AllowAnyMethod()
-                .WithOrigins("http://localhost:5126", "https://localhost:7173"))
+    cors => cors
+        .AddPolicy(name: "default-policy", policy => policy
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .WithOrigins("http://localhost:5126", "https://localhost:7173"))
 );
 
-// Add a named HttpClient. We'll use this client to retrieve movie data from the 3rd party API
+// Add a named HttpClient for retrieving movie data from the 3rd party Movie API
 builder.Services.AddHttpClient("MovieDatabase", (httpClient) =>
 {
     httpClient.BaseAddress = new Uri("https://api.themoviedb.org/3/");
@@ -36,23 +43,30 @@ builder.Services.AddSingleton<IMovieService, MovieService>();
 
 var app = builder.Build();
 
-// Add our custom endpoints, which our front-end can call using HTMX
+// Add custom endpoints, which our frontend can call using HTMX
 app.AddHtmxEndpoints();
 
 // Configure a custom middleware to handle 404 responses.
 // When page is not found, we'll serve the index page.
 app.Use404Middleware();
 
-// DefaultFiles() and UseStaticFiles() middlewares serve the wwwroot/index.html file
-// (the front-end of this app)to the client when accessing the application base address.
-app.UseDefaultFiles();
-app.UseStaticFiles();
+// Configure HTTP requests to be redirected to HTTPS
+app.UseHttpsRedirection();
+
+// Configure default static files to be served to the client
+var fileOptions = new DefaultFilesOptions();
+fileOptions.DefaultFileNames.Clear();
+fileOptions.DefaultFileNames.Add("index.html");
+fileOptions.DefaultFileNames.Add("styles.css");
+app.UseDefaultFiles(fileOptions);
+
+// Configure the location of our static files
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(app.Environment.ContentRootPath, "Frontend"))
+});
 
 // Use our custom CORS policy
 app.UseCors("default-policy");
 
-// Confiogure HTTP requests to redirected to HTTPS
-app.UseHttpsRedirection();
-
-// Configurations done, run the app
 app.Run();

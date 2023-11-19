@@ -1,0 +1,26 @@
+﻿@* Loop through the movies *@
+@foreach (MovieDetails movie in Model.Movies.Results)
+{
+    <MovieDetailsCard Model="@movie" />
+}
+
+@* Fetch more results if we are not on the last page already *@
+@if (Model.Movies.Page < Model.Movies.TotalPages)
+{
+    <div hx-trigger="revealed"
+         hx-swap="afterend"
+         hx-post="search-movies-by-keyword"
+         hx-vals='{"keyword": "@Model.Keyword", "page": "@(Model.Movies.Page + 1)"}'>
+    </div>
+}
+
+@code 
+{
+    [Parameter] public MovieDetailsListParameters Model { get; set; } = new();
+
+    public class MovieDetailsListParameters
+    {
+        public MovieSearchResponse<MovieDetails> Movies { get; set; }
+        public string Keyword { get; set; }
+    }
+}
