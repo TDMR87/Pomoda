@@ -6,7 +6,7 @@
             <img src="@(Model.ImageBaseAddress + Model.PosterPath)" />
         </header>
         <h3 class="card-title">@Model.Title (@Model.ReleaseDate?.Split('-')[0])</h3>
-        <p>@Model.Overview.Peek(characters: 100 - Model.Title?.Length ?? 0)</p>
+        <p>@Model.Overview.Peek(characters: 100 - Model.Title?.Length ?? 0)...</p>
         <button hx-get="@Endpoints.OpenMovieDetailsDialog"
                 hx-vals='{"movieId": "@Model.Id"}'
                 hx-target="body"

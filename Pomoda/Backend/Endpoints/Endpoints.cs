@@ -38,11 +38,4 @@ public static class Endpoints
             return Razor.Component<Empty>();
         });
     }
-
-    
-}
-
-public class Test
-{
-    
 }
