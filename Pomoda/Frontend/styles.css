@@ -26,3 +26,14 @@
     background-color: transparent;
     padding: 10px;
 }
+
+/* Initial style for the floating search bar */
+#floating-search-bar {
+    position: sticky;
+    top: 0;
+    transition: transform 0.3s ease-in-out;
+}
+    /* Hide the search bar when user scrolls down */
+    #floating-search-bar.scrolled-down {
+        transform: translateY(-150%);
+    }

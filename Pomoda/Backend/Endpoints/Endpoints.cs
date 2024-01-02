@@ -10,12 +10,12 @@ public static class Endpoints
 
     public static void AddHtmxEndpoints(this WebApplication app)
     {
-        app.MapPost(SearchMoviesByKeyword, async (HttpContext context, [FromServices] IMovieService movieService) =>
+        app.MapPost(SearchMoviesByKeyword, async (
+            HttpContext context, 
+            [FromServices] IMovieService movieService, 
+            [FromForm] string keyword, 
+            [FromForm] int page = 1) =>
         {
-            var form = await context.Request.ReadFormAsync();
-            var keyword = form.ContainsKey("keyword") ? form["keyword"].ToString() : string.Empty;
-            var page = form.ContainsKey("page") ? int.Parse(form["page"]!) : 1;
-
             var movies = await movieService.SearchByKeywordAsync(keyword, page);
 
             var parameters = new MovieDetailsListParameters 
@@ -25,7 +25,7 @@ public static class Endpoints
             };
 
             return Razor.Component<MovieDetailsList>(parameters);
-        });
+        }).DisableAntiforgery();
 
         app.MapGet(OpenMovieDetailsDialog, async ([FromQuery] string movieId, [FromServices] IMovieService movieService) =>
         {

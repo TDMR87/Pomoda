@@ -18,16 +18,6 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 // Configure Razor Components to be used
 builder.Services.AddRazorComponents();
 
-// Add a custom CORS policy
-builder.Services.AddCors
-(
-    cors => cors
-        .AddPolicy(name: "default-policy", policy => policy
-        .AllowAnyHeader()
-        .AllowAnyMethod()
-        .WithOrigins("http://localhost:5126", "https://localhost:7173"))
-);
-
 // Add a named HttpClient for retrieving movie data from the 3rd party Movie API
 builder.Services.AddHttpClient("MovieDatabase", (httpClient) =>
 {
@@ -50,9 +40,6 @@ app.AddHtmxEndpoints();
 // When page is not found, we'll serve the index page.
 app.Use404Middleware();
 
-// Configure HTTP requests to be redirected to HTTPS
-app.UseHttpsRedirection();
-
 // Configure default static files to be served to the client
 var fileOptions = new DefaultFilesOptions();
 fileOptions.DefaultFileNames.Clear();
@@ -65,8 +52,5 @@ app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(Path.Combine(app.Environment.ContentRootPath, "Frontend"))
 });
-
-// Use our custom CORS policy
-app.UseCors("default-policy");
 
 app.Run();
