@@ -2,7 +2,7 @@
 
 namespace Pomoda.Backend.Endpoints;
 
-public static class Endpoints
+public static class HtmxEndpoints
 {
     public const string SearchMoviesByKeyword = "search-movies-by-keyword";
     public const string OpenMovieDetailsDialog = "open-movie-details-dialog";
@@ -11,8 +11,7 @@ public static class Endpoints
     public static void AddHtmxEndpoints(this WebApplication app)
     {
         app.MapPost(SearchMoviesByKeyword, async (
-            HttpContext context, 
-            [FromServices] IMovieService movieService, 
+            IMovieService movieService, 
             [FromForm] string keyword, 
             [FromForm] int page = 1) =>
         {
@@ -25,6 +24,7 @@ public static class Endpoints
             };
 
             return Razor.Component<MovieDetailsList>(parameters);
+
         }).DisableAntiforgery();
 
         app.MapGet(OpenMovieDetailsDialog, async ([FromQuery] string movieId, [FromServices] IMovieService movieService) =>

@@ -11,8 +11,9 @@
     <br>
     <br>
 	<button 
+        onclick="SetModalClosed()"
         type="button"
-        hx-get="@Endpoints.CloseMovieDetailsDialog" 
+        hx-get="@HtmxEndpoints.CloseMovieDetailsDialog" 
         hx-target="#movie-details-modal" 
         hx-swap="outerHTML"
         hx-indicator="#isLoading_@Model.Id">
@@ -20,7 +21,8 @@
     </button>
     <progress class="htmx-indicator" id="isLoading_@Model.Id"></progress>
     </article>
-</dialog>
+</dialog
+
 
 @code
 {
