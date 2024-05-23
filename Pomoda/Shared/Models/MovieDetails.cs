@@ -1,10 +1,5 @@
 ﻿namespace Pomoda.Shared.Models;
 
-/*
- * The classes in this file are modeling data returned 
- * from the 3rd party movie database.
- */
-
 public class MovieDetails
 {
     public string ImageBaseAddress { get; init; } = "https://image.tmdb.org/t/p/w185/";
@@ -45,12 +40,6 @@ public class MovieDetails
     [JsonPropertyName("poster_path")]
     public string? PosterPath { get; set; }
 
-    [JsonPropertyName("production_companies")]
-    public ProductionCompanies[] ProductionCompanies { get; set; } = [];
-
-    [JsonPropertyName("production_countries")]
-    public ProductionCountries[] ProductionCountries { get; set; } = [];
-
     [JsonPropertyName("release_date")]
     public string? ReleaseDate { get; set; }
 
@@ -59,9 +48,6 @@ public class MovieDetails
 
     [JsonPropertyName("runtime")]
     public int Runtime { get; set; }
-
-    [JsonPropertyName("spoken_languages")]
-    public SpokenLanguages[] SpokenLanguages { get; set; } = [];
 
     [JsonPropertyName("status")]
     public string? Status { get; set; }
@@ -86,42 +72,6 @@ public class Genre
 {
     [JsonPropertyName("id")]
     public int Id { get; set; }
-
-    [JsonPropertyName("name")]
-    public string? Name { get; set; }
-}
-
-public class ProductionCompanies
-{
-    [JsonPropertyName("id")]
-    public int Id { get; set; }
-
-    [JsonPropertyName("logo_path")]
-    public string? LogoPath { get; set; }
-
-    [JsonPropertyName("name")]
-    public string? Name { get; set; }
-
-    [JsonPropertyName("origin_country")]
-    public string? OriginCountry { get; set; }
-}
-
-public class ProductionCountries
-{
-    [JsonPropertyName("iso_3166_1")]
-    public string? LanguageCode { get; set; }
-
-    [JsonPropertyName("name")]
-    public string? Name { get; set; }
-}
-
-public class SpokenLanguages
-{
-    [JsonPropertyName("english_name")]
-    public string? EnglishName { get; set; }
-
-    [JsonPropertyName("iso_639_1")]
-    public string? LanguageCode { get; set; }
 
     [JsonPropertyName("name")]
     public string? Name { get; set; }

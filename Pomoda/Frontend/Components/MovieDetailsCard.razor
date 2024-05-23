@@ -1,6 +1,4 @@
-﻿@using Pomoda.Backend.Endpoints
-
-<div class=" col-xs-12 col-sm-6 col-lg-4 movie-card">
+﻿<div class=" col-xs-12 col-sm-6 col-lg-4 movie-card">
     <article style="padding-bottom:20px">
         <header style="margin-bottom:20px">
             <img src="@(Model.ImageBaseAddress + Model.PosterPath)" />
@@ -9,7 +7,7 @@
         <p>@Model.Overview.Peek(characters: 100 - Model.Title?.Length ?? 0)...</p>
         <button 
             onclick="SetModalOpen()"
-            hx-get="@HtmxEndpoints.OpenMovieDetailsDialog"
+            hx-get="@MovieEndpoints.OpenMovieDetailsDialog"
             hx-vals='{"movieId": "@Model.Id"}'
             hx-target="body"
             hx-swap="beforeend"

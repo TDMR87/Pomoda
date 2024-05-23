@@ -1,0 +1,13 @@
+﻿global using Microsoft.AspNetCore.Mvc;
+global using System.Text.Json.Serialization;
+global using System.Net.Http.Headers;
+global using Pomoda.Shared.Models;
+global using Pomoda.Shared.Utils;
+global using Pomoda.Backend.Services;
+global using Pomoda.Backend.Endpoints;
+global using Pomoda.Backend.Middleware;
+global using Pomoda.Frontend.Components;
+global using Microsoft.Extensions.FileProviders;
+global using Microsoft.AspNetCore.Components;
+global using Microsoft.AspNetCore.Http.HttpResults;
+global using static Pomoda.Frontend.Components.MovieDetailsList;

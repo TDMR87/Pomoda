@@ -1,28 +1,24 @@
 ﻿namespace Pomoda.Backend.Services;
 
-/// <summary>
-/// This service retrieves movie data from an external movie database API.
-/// </summary>
-public class MovieService : IMovieService
+public class MovieService
 {
-    private readonly IHttpClientFactory _httpClientFactory;
+    private readonly HttpClient _httpClient;
 
-    public MovieService(IHttpClientFactory httpClientFactory, IConfiguration config)
+    public MovieService(HttpClient httpClient, IConfiguration configuration)
     {
-        _httpClientFactory = httpClientFactory;
+        _httpClient = httpClient;
+
+        httpClient.BaseAddress = new Uri(configuration["MovieDatabase:ApiBaseAddress"]!);
+
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue
+        (
+            "Bearer", configuration["MovieDatabase:ApiAccessToken"]
+        );
     }
 
-    /// <summary>
-    /// Retrieves details of movies that match the specified search keyword.
-    /// </summary>
-    /// <param name="keyword"></param>
-    /// <param name="includeAdult"></param>
-    /// <returns></returns>
-    public async Task<MovieSearchResponse<MovieDetails>> SearchByKeywordAsync(string keyword, int page)
+    public async Task<MovieSearchResponse<MovieDetails>> GetMoviesByKeywordAsync(string keyword, int page)
     {
-        var httpClient = _httpClientFactory.CreateClient("MovieDatabase");
-
-        var response = await httpClient.GetAsync
+        var response = await _httpClient.GetAsync
         (
             $"search/multi?query={keyword}" +
             $"&include_adult=false" +
@@ -49,25 +45,12 @@ public class MovieService : IMovieService
         }
     }
 
-    /// <summary>
-    /// Returns details of a single movie with the specified id.
-    /// </summary>
-    /// <param name="movieId"></param>
-    /// <returns></returns>
-    public async Task<MovieDetails?> GetById(string movieId)
+    public async Task<MovieDetails?> GetMovieById(string id)
     {
-        var httpClient = _httpClientFactory.CreateClient("MovieDatabase");
+        var response = await _httpClient.GetAsync($"movie/{id}");
 
-        var response = await httpClient.GetAsync($"movie/{movieId}");
-
-        if (response.IsSuccessStatusCode)
-        {
-            var movie = await response.Content.ReadFromJsonAsync<MovieDetails>();
-            return movie;
-        }
-        else
-        {
-            return null;
-        }
+        return response.IsSuccessStatusCode
+            ? await response.Content.ReadFromJsonAsync<MovieDetails>()
+            : null;
     }
 }

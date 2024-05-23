@@ -1,21 +1,16 @@
-﻿using static Pomoda.Frontend.Components.MovieDetailsList;
+﻿namespace Pomoda.Backend.Endpoints;
 
-namespace Pomoda.Backend.Endpoints;
-
-public static class HtmxEndpoints
+public static class MovieEndpoints
 {
     public const string SearchMoviesByKeyword = "search-movies-by-keyword";
     public const string OpenMovieDetailsDialog = "open-movie-details-dialog";
     public const string CloseMovieDetailsDialog = "close-movie-details-dialog";
 
-    public static void AddHtmxEndpoints(this WebApplication app)
+    public static void AddMovieEndpoints(this WebApplication app)
     {
-        app.MapPost(SearchMoviesByKeyword, async (
-            IMovieService movieService, 
-            [FromForm] string keyword, 
-            [FromForm] int page = 1) =>
+        app.MapPost(SearchMoviesByKeyword, async (MovieService movieService, [FromForm] string keyword, [FromForm] int page = 1) =>
         {
-            var movies = await movieService.SearchByKeywordAsync(keyword, page);
+            var movies = await movieService.GetMoviesByKeywordAsync(keyword, page);
 
             var parameters = new MovieDetailsListParameters 
             { 
@@ -27,9 +22,9 @@ public static class HtmxEndpoints
 
         }).DisableAntiforgery();
 
-        app.MapGet(OpenMovieDetailsDialog, async ([FromQuery] string movieId, [FromServices] IMovieService movieService) =>
+        app.MapGet(OpenMovieDetailsDialog, async (MovieService movieService, [FromQuery] string movieId) =>
         {
-            MovieDetails? movie = await movieService.GetById(movieId);
+            MovieDetails? movie = await movieService.GetMovieById(movieId);
             return Razor.Component<MovieDetailsDialog>(movie);
         });
 

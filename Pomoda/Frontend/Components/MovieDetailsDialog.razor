@@ -1,6 +1,4 @@
-﻿@using Pomoda.Backend.Endpoints
-
-<dialog id="movie-details-modal" open="true">
+﻿<dialog id="movie-details-modal" open="true">
     <article style="text-align:center">
     <img src="@(Model.ImageBaseAddress + Model.PosterPath)" />
     <br>                    
@@ -13,7 +11,7 @@
 	<button 
         onclick="SetModalClosed()"
         type="button"
-        hx-get="@HtmxEndpoints.CloseMovieDetailsDialog" 
+        hx-get="@MovieEndpoints.CloseMovieDetailsDialog" 
         hx-target="#movie-details-modal" 
         hx-swap="outerHTML"
         hx-indicator="#isLoading_@Model.Id">
@@ -21,7 +19,7 @@
     </button>
     <progress class="htmx-indicator" id="isLoading_@Model.Id"></progress>
     </article>
-</dialog
+</dialog>
 
 
 @code
